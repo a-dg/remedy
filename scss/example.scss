@@ -5,9 +5,9 @@ $output_rem: true;
 // Set base font size
 $base_font_size: 16px;
 
-// Import rem function and/or mixin
-// Note: mixin requires strip_units() in _function.scss
-@import 'function';
+// Import functions and/or mixin
+// Note: mixin requires several functions in _functions.scss
+@import 'functions';
 @import 'mixin';
 
 // Using mixin

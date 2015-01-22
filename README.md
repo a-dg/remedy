@@ -35,17 +35,17 @@ Let’s face it, the `@include` syntax for the mixin is long and tedious and you
 margin: r(7px 0 12px 20%); // Bonus shortcut!
 ```
 
-Both the mixin and the function make use of an included `strip_units()` function for proper operation.
+Both the mixin and the function make use of various attendant utility functions for proper operation.
 
 
 ## Configuration
 
-Begin by setting the output types and the base font size, then importing the function and/or mixin. Note: the mixin requires the `strip_units()` function in [_function.scss](scss/_function.scss).
+Begin by setting the output types and the base font size, then importing the functions and/or mixin. Note: the mixin requires several functions in [_functions.scss](scss/_functions.scss).
 
 ```scss
 $output_rem: true;
 $base_font_size: 16px;
-@import 'function';
+@import 'functions';
 @import 'mixin';
 ```
 
