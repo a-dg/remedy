@@ -54,3 +54,9 @@
     #{$property}: $all_rem_values;
   }
 }
+
+
+@mixin rem_round($original_values...) {
+  $round_values: rem_round($original_values...);
+  @include rem($round_values...);
+}

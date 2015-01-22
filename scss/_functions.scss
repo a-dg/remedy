@@ -31,7 +31,8 @@
 
 
 @function rr($original_values...) {
-  @return rem_round($original_values...);
+  $round_values: rem_round($original_values...);
+  @return rem($round_values...);
 }
 @function rem_round($original_values...) {
   $all_round_values: ();
@@ -50,7 +51,7 @@
     }
     $all_round_values: append($all_round_values, $round_values, comma);
   }
-  @return rem($all_round_values...);
+  @return $all_round_values;
 }
 
 

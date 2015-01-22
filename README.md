@@ -99,10 +99,11 @@ Since `rem()` will allow any garbage you throw its way to pass through unharmed,
 
 ## Rounding values
 
-By default, the `rem()` function calculates `rem` values from the `px` values as they are passed in, without modifying them. If there’s a chance that the original `px` values are not integers, you can optionally round them off before converting to `rem` values. Do this by calling `rem_round()` as such:
+By default, `rem` values are calculated from the `px` values as they are passed in, without modifying them. If there’s a chance that the original `px` values are not integers, you can optionally round them off before converting to `rem` values. Do this by calling the `rem_round()` mixin or function as such:
 
 ```scss
 div {
+  @include rem_round(margin, 20.3px 8.6px);
   padding-left: rem_round($column_gutter / 3);
   border-width: rr($offset * 0.7); // Shortcut!
 }

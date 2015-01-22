@@ -27,3 +27,10 @@ $base_font_size: 16px;
   background: r(#fff url('../img/icon.png') 15px 10px no-repeat);
   background-size: r(44px auto, 50% 312px);
 }
+
+// Rounding px before converting to rem
+.rounded {
+  @include rem_round(margin, 20.3px 8.6px);
+  padding-left: rem_round(13px / 3);
+  border-width: rr(15px * 0.7); // Shortcut!
+}
