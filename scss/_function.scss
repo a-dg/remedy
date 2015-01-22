@@ -2,6 +2,10 @@
   @return rem($original_values...);
 }
 @function rem($original_values...) {
+  $output_rem: true;
+  @if not $output_rem {
+    @return $original_values;
+  }
   $px_units: 'px', 'pt';
   $non_px_units: '%', 'em', 'rem', 'ch', 'ex', 'vw', 'vh', 'vmin', 'vmax', 'cm', 'mm', 'in', 'pc';
   

@@ -1,5 +1,6 @@
 @mixin rem($property, $original_values...) {
-  $provide_pixel_fallback: true;
+  $output_px: true;
+  $output_rem: true;
   $px_units: 'px', 'pt';
   $non_px_units: '%', 'em', 'rem', 'ch', 'ex', 'vw', 'vh', 'vmin', 'vmax', 'cm', 'mm', 'in', 'pc';
   
@@ -50,8 +51,12 @@
   }
   
   // Output converted properties
-  @if $provide_pixel_fallback and $all_px_values != $all_rem_values {
+  @if $output_px and not $output_rem {
+    #{$property}: $all_px_values;
+  } @else if $output_px and $output_rem and $all_px_values != $all_rem_values {
     #{$property}: $all_px_values;
   }
-  #{$property}: $all_rem_values;
+  @if $output_rem or not $output_px {
+    #{$property}: $all_rem_values;
+  }
 }
