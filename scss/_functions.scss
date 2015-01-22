@@ -72,9 +72,9 @@
 }
 @function cleanup($original_values...) {
   $all_clean_values: ();
-  @each $original_value in $original_values {
+  @each $value_set in $original_values {
     $clean_values: ();
-    @each $value in $original_value {
+    @each $value in $value_set {
       @if is_zero($value) {
         // Zero: enforce no units
         $clean_values: append($clean_values, 0);
