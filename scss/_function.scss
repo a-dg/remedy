@@ -2,10 +2,11 @@
   @return rem($original_values...);
 }
 @function rem($original_values...) {
-  $output_rem: true;
   @if not $output_rem {
     @return $original_values;
   }
+  
+  $base_font_size: 16px !default;
   $px_units: 'px', 'pt';
   $non_px_units: '%', 'em', 'rem', 'ch', 'ex', 'vw', 'vh', 'vmin', 'vmax', 'cm', 'mm', 'in', 'pc';
   

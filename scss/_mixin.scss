@@ -1,6 +1,8 @@
 @mixin rem($property, $original_values...) {
-  $output_px: true;
-  $output_rem: true;
+  $output_px: true !default;
+  $output_rem: true !default;
+  
+  $base_font_size: 16px !default;
   $px_units: 'px', 'pt';
   $non_px_units: '%', 'em', 'rem', 'ch', 'ex', 'vw', 'vh', 'vmin', 'vmax', 'cm', 'mm', 'in', 'pc';
   $non_rounding_properties: 'font-size', 'letter-spacing';

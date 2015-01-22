@@ -40,9 +40,10 @@ Both the mixin and the function make use of an included `strip_units()` function
 
 ## Configuration
 
-Begin by setting your base font size, and importing the function and/or mixin. Note: the mixin requires the `strip_units()` function in [_function.scss](scss/_function.scss).
+Begin by setting the output types and the base font size, then importing the function and/or mixin. Note: the mixin requires the `strip_units()` function in [_function.scss](scss/_function.scss).
 
 ```scss
+$output_rem: true;
 $base_font_size: 16px;
 @import 'function';
 @import 'mixin';
