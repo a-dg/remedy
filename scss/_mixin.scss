@@ -3,8 +3,6 @@
   $output_rem: true !default;
   
   $base_font_size: 16px !default;
-  $px_units: 'px', 'pt';
-  $non_px_units: '%', 'em', 'rem', 'ch', 'ex', 'vw', 'vh', 'vmin', 'vmax', 'cm', 'mm', 'in', 'pc';
   $non_rounding_properties: 'font-size', 'letter-spacing', 'word-spacing';
   
   $all_px_values: ();
@@ -44,7 +42,7 @@
     $all_rem_values: append($all_rem_values, $rem_values, comma);
   }
   
-  // Output converted properties
+  // Output converted values
   @if $output_px and not $output_rem {
     #{$property}: $all_px_values;
   } @else if $output_px and $output_rem and $all_px_values != $all_rem_values {
