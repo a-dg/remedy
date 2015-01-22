@@ -3,6 +3,7 @@
   $output_rem: true;
   $px_units: 'px', 'pt';
   $non_px_units: '%', 'em', 'rem', 'ch', 'ex', 'vw', 'vh', 'vmin', 'vmax', 'cm', 'mm', 'in', 'pc';
+  $non_rounding_properties: 'font-size', 'letter-spacing';
   
   $all_px_values: ();
   $all_rem_values: ();
@@ -41,7 +42,15 @@
       {
         // Pixel-like units: calculate rem value from $base_font_size
         $rem_value: ($value / $base_font_size);
-        $px_values: append($px_values, round($value));
+        @if index($non_rounding_properties, $property) {
+          $px_values: append($px_values, $value);
+        } @else {
+          $rounded_value: round($value);
+          @if strip_units($value) == 0 {
+            $rounded_value: 0;
+          }
+          $px_values: append($px_values, $rounded_value);
+        }
         $rem_values: append($rem_values, #{$rem_value}rem);
       }
     }
