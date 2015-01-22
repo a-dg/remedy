@@ -1,0 +1,57 @@
+@mixin rem($property, $original_values...) {
+  $provide_pixel_fallback: true;
+  $px_units: 'px', 'pt';
+  $non_px_units: '%', 'em', 'rem', 'ch', 'ex', 'vw', 'vh', 'vmin', 'vmax', 'cm', 'mm', 'in', 'pc';
+  
+  $all_px_values: ();
+  $all_rem_values: ();
+  
+  $count_values: length($original_values);
+  @for $i from 1 through $count_values {
+    $px_values: ();
+    $rem_values: ();
+    
+    $values: nth($original_values, $i);
+    @each $value in $values {
+      @if type-of($value) == number and strip_units($value) == 0 {
+        // Zero: enforce no units
+        $px_values: append($px_values, 0);
+        $rem_values: append($rem_values, 0);
+      } @else if
+        type-of($value) == string
+        or type-of($value) == color
+        or type-of($value) == bool
+        or (
+          type-of($value) == number
+          and unitless($value)
+        ) or (
+          type-of($value) == number
+          and not unitless($value)
+          and index($non_px_units, unit($value))
+        )
+      {
+        // Unitless and non-pixel units: pass through unmodified
+        $px_values: append($px_values, $value);
+        $rem_values: append($rem_values, $value);
+      } @else // if
+        // type-of($value) == number
+        // and not unitless($value)
+        // and index($px_units, unit($value))
+      {
+        // Pixel-like units: calculate rem value from $base_font_size
+        $rem_value: ($value / $base_font_size);
+        $px_values: append($px_values, round($value));
+        $rem_values: append($rem_values, #{$rem_value}rem);
+      }
+    }
+    
+    $all_px_values: append($all_px_values, $px_values, comma);
+    $all_rem_values: append($all_rem_values, $rem_values, comma);
+  }
+  
+  // Output converted properties
+  @if $provide_pixel_fallback and $all_px_values != $all_rem_values {
+    #{$property}: $all_px_values;
+  }
+  #{$property}: $all_rem_values;
+}
