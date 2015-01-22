@@ -23,6 +23,7 @@
         // Pixel-like units: calculate rem value from $base_font_size
         $base_font_value: strip_units($base_font_size);
         $rem_value: strip_units($value / $base_font_value);
+        $rem_values: append($rem_values, #{$rem_value}rem);
         @if index($non_rounding_properties, $property) {
           $px_values: append($px_values, $value);
         } @else {
@@ -32,7 +33,6 @@
           }
           $px_values: append($px_values, $rounded_value);
         }
-        $rem_values: append($rem_values, #{$rem_value}rem);
       } @else {
         // Unitless and non-pixel units: pass through unmodified
         $px_values: append($px_values, $value);
