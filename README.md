@@ -70,6 +70,18 @@ To use the mixin, specify the property, followed by the desired values, all with
 }
 ```
 
+Or combine multiple properties into one statement, separated by commas:
+
+```scss
+.combined {
+  @include rem((
+    margin: 20px auto,
+    border-top: 7px solid #f90 !important,
+    background-size: (44px auto, 50% 312px)
+  ));
+}
+```
+
 To use the function, wrap as much or as little of the value as you want in the parentheses:
 
 ```scss

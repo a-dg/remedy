@@ -17,6 +17,13 @@ $base_font_size: 16px;
   @include rem(border-top, 7px solid #f90 !important);
   @include rem(background, #fff url('../img/icon.png') 15px 10px no-repeat);
   @include rem(background-size, 44px auto, 50% 312px);
+  
+  // Combine multiple properties
+  @include rem((
+    margin: 20px auto,
+    border-top: 7px solid #f90 !important,
+    background-size: (44px auto, 50% 312px)
+  ));
 }
 
 // Using function

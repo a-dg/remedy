@@ -1,55 +1,64 @@
-@mixin rem($property, $original_values...) {
-  $output_px: true !default;
-  $output_rem: true !default;
-  $base_font_size: 16px !default;
-  
-  $non_rounding_properties: 'font-size', 'letter-spacing', 'word-spacing';
-  
-  $all_px_values: ();
-  $all_rem_values: ();
-  
-  @each $value_set in $original_values {
-    $px_values: ();
-    $rem_values: ();
+@mixin rem($properties, $original_values...) {
+  @if type-of($properties) == map {
+    @each $key in map-keys($properties) {
+      @include rem($key, map-get($properties, $key)...);
+    }
+  } @else {
+    $output_px: true !default;
+    $output_rem: true !default;
+    $base_font_size: 16px !default;
     
-    @each $value in $value_set {
-      @if is_zero($value) {
-        // Zero: enforce no units
-        $px_values: append($px_values, 0);
-        $rem_values: append($rem_values, 0);
-      } @else if is_convertible($value) {
-        // Pixel-like units: calculate rem value from $base_font_size
-        $base_font_value: strip_units($base_font_size);
-        $rem_value: strip_units($value / $base_font_value);
-        $rem_values: append($rem_values, #{$rem_value}rem);
-        @if index($non_rounding_properties, $property) {
-          $px_values: append($px_values, $value);
-        } @else {
-          $rounded_value: round($value);
-          @if is_zero($rounded_value) {
-            $rounded_value: 0;
+    $property: $properties;
+    $non_rounding_properties: 'font-size', 'letter-spacing', 'word-spacing';
+    
+    $all_px_values: ();
+    $all_rem_values: ();
+    
+    $original_separator: list-separator($original_values);
+    @each $value_set in $original_values {
+      $px_values: ();
+      $rem_values: ();
+      
+      $set_separator: list-separator($value_set);
+      @each $value in $value_set {
+        @if is_zero($value) {
+          // Zero: enforce no units
+          $px_values: append($px_values, 0, $set_separator);
+          $rem_values: append($rem_values, 0, $set_separator);
+        } @else if is_convertible($value) {
+          // Pixel-like units: calculate rem value from $base_font_size
+          $base_font_value: strip_units($base_font_size);
+          $rem_value: strip_units($value / $base_font_value);
+          $rem_values: append($rem_values, #{$rem_value}rem, $set_separator);
+          @if index($non_rounding_properties, $property) {
+            $px_values: append($px_values, $value, $set_separator);
+          } @else {
+            $rounded_value: round($value);
+            @if is_zero($rounded_value) {
+              $rounded_value: 0;
+            }
+            $px_values: append($px_values, $rounded_value, $set_separator);
           }
-          $px_values: append($px_values, $rounded_value);
+        } @else {
+          // Unitless and non-pixel units: pass through unmodified
+          $px_values: append($px_values, $value, $set_separator);
+          $rem_values: append($rem_values, $value, $set_separator);
         }
-      } @else {
-        // Unitless and non-pixel units: pass through unmodified
-        $px_values: append($px_values, $value);
-        $rem_values: append($rem_values, $value);
       }
+      
+      $all_px_values: append($all_px_values, $px_values, $original_separator);
+      $all_rem_values: append($all_rem_values, $rem_values, $original_separator);
     }
     
-    $all_px_values: append($all_px_values, $px_values, comma);
-    $all_rem_values: append($all_rem_values, $rem_values, comma);
-  }
-  
-  // Output converted values
-  @if $output_px and not $output_rem {
-    #{$property}: $all_px_values;
-  } @else if $output_px and $output_rem and $all_px_values != $all_rem_values {
-    #{$property}: $all_px_values;
-  }
-  @if $output_rem or not $output_px {
-    #{$property}: $all_rem_values;
+    // Output converted values
+    @if $output_px and not $output_rem {
+      #{$property}: $all_px_values;
+    } @else if $output_px and $output_rem and $all_px_values != $all_rem_values {
+      #{$property}: $all_px_values;
+    }
+    @if $output_rem or not $output_px {
+      #{$property}: $all_rem_values;
+    }
   }
 }
 
