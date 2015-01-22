@@ -6,11 +6,12 @@
     @return cleanup($original_values...);
   }
   
-  $all_rem_values: ();
   $base_font_size: 16px !default;
-  @each $original_value in $original_values {
+  
+  $all_rem_values: ();
+  @each $value_set in $original_values {
     $rem_values: ();
-    @each $value in $original_value {
+    @each $value in $value_set {
       @if is_zero($value) {
         // Zero: enforce no units
         $rem_values: append($rem_values, 0);
@@ -36,10 +37,9 @@
 }
 @function rem_round($original_values...) {
   $all_round_values: ();
-  @for $i from 1 through length($original_values) {
+  @each $value_set in $original_values {
     $round_values: ();
-    $values: nth($original_values, $i);
-    @each $value in $values {
+    @each $value in $value_set {
       @if is_convertible($value) {
         // Pixel-like units: round
         $round_value: round($value);
