@@ -10,38 +10,16 @@
   $all_px_values: ();
   $all_rem_values: ();
   
-  $count_values: length($original_values);
-  @for $i from 1 through $count_values {
+  @each $original_value in $original_values {
     $px_values: ();
     $rem_values: ();
     
-    $values: nth($original_values, $i);
-    @each $value in $values {
-      @if type-of($value) == number and strip_units($value) == 0 {
+    @each $value in $original_value {
+      @if is_zero($value) {
         // Zero: enforce no units
         $px_values: append($px_values, 0);
         $rem_values: append($rem_values, 0);
-      } @else if
-        type-of($value) == string
-        or type-of($value) == color
-        or type-of($value) == bool
-        or (
-          type-of($value) == number
-          and unitless($value)
-        ) or (
-          type-of($value) == number
-          and not unitless($value)
-          and index($non_px_units, unit($value))
-        )
-      {
-        // Unitless and non-pixel units: pass through unmodified
-        $px_values: append($px_values, $value);
-        $rem_values: append($rem_values, $value);
-      } @else // if
-        // type-of($value) == number
-        // and not unitless($value)
-        // and index($px_units, unit($value))
-      {
+      } @else if is_convertible($value) {
         // Pixel-like units: calculate rem value from $base_font_size
         $base_font_value: strip_units($base_font_size);
         $rem_value: strip_units($value / $base_font_value);
@@ -49,12 +27,16 @@
           $px_values: append($px_values, $value);
         } @else {
           $rounded_value: round($value);
-          @if strip_units($value) == 0 {
+          @if is_zero($rounded_value) {
             $rounded_value: 0;
           }
           $px_values: append($px_values, $rounded_value);
         }
         $rem_values: append($rem_values, #{$rem_value}rem);
+      } @else {
+        // Unitless and non-pixel units: pass through unmodified
+        $px_values: append($px_values, $value);
+        $rem_values: append($rem_values, $value);
       }
     }
     

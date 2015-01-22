@@ -8,25 +8,20 @@
   
   $all_rem_values: ();
   $base_font_size: 16px !default;
-  @for $i from 1 through length($original_values) {
+  @each $original_value in $original_values {
     $rem_values: ();
-    $values: nth($original_values, $i);
-    @each $value in $values {
-      $is_zero: is_zero($value);
-      $pass_through: is_pass_through($value);
-      // $is_convertible: is_convertible($value);
-      
-      @if $is_zero {
+    @each $value in $original_value {
+      @if is_zero($value) {
         // Zero: enforce no units
         $rem_values: append($rem_values, 0);
-      } @else if $pass_through {
-        // Unitless and non-pixel units: pass through unmodified
-        $rem_values: append($rem_values, $value);
-      } @else /* if $is_convertible */ {
+      } @else if is_convertible($value) {
         // Pixel-like units: calculate rem value from $base_font_size
         $base_font_value: strip_units($base_font_size);
         $rem_value: strip_units($value / $base_font_value);
         $rem_values: append($rem_values, #{$rem_value}rem);
+      } @else {
+        // Unitless and non-pixel units: pass through unmodified
+        $rem_values: append($rem_values, $value);
       }
     }
     $all_rem_values: append($all_rem_values, $rem_values, comma);
@@ -44,23 +39,16 @@
     $round_values: ();
     $values: nth($original_values, $i);
     @each $value in $values {
-      $is_zero: is_zero($value);
-      $pass_through: is_pass_through($value);
-      // $is_convertible: is_convertible($value);
-      
-      @if $is_zero {
-        // Zero: enforce no units
-        $round_values: append($round_values, 0);
-      } @else if $pass_through {
-        // Unitless and non-pixel units: pass through unmodified
-        $round_values: append($round_values, $value);
-      } @else /* if $is_convertible */ {
+      @if is_convertible($value) {
         // Pixel-like units: round
         $round_value: round($value);
-        @if strip_units($value) == 0 {
+        @if is_zero($round_value) {
           $round_value: 0;
         }
         $round_values: append($round_values, $round_value);
+      } @else {
+        // Unitless and non-pixel units: pass through unmodified
+        $round_values: append($round_values, $value);
       }
     }
     $all_round_values: append($all_round_values, $round_values, comma);
@@ -77,24 +65,10 @@
     type-of($value) == number
     and strip_units($value) == 0;
 }
-@function is_pass_through($value) {
-  $non_px_units: '%', 'em', 'rem', 'ch', 'ex', 'vw', 'vh', 'vmin', 'vmax', 'cm', 'mm', 'in', 'pc';
-  @return
-    type-of($value) == string
-    or type-of($value) == color
-    or type-of($value) == bool
-    or (
-      type-of($value) == number
-      and unitless($value)
-    ) or (
-      type-of($value) == number
-      and not unitless($value)
-      and index($non_px_units, unit($value))
-    );
-}
 @function is_convertible($value) {
   $px_units: 'px', 'pt';
-  @return type-of($value) == number
+  @return
+    type-of($value) == number
     and not unitless($value)
     and index($px_units, unit($value));
 }
