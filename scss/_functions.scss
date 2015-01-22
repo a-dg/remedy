@@ -3,7 +3,7 @@
 }
 @function rem($original_values...) {
   @if not $output_rem {
-    @return $original_values;
+    @return cleanup($original_values...);
   }
   
   $all_rem_values: ();
@@ -68,4 +68,21 @@
     type-of($value) == number
     and not unitless($value)
     and index($px_units, unit($value));
+}
+@function cleanup($original_values...) {
+  $all_clean_values: ();
+  @each $original_value in $original_values {
+    $clean_values: ();
+    @each $value in $original_value {
+      @if is_zero($value) {
+        // Zero: enforce no units
+        $clean_values: append($clean_values, 0);
+      } @else {
+        // Non-zero: pass through unmodified
+        $clean_values: append($clean_values, $value);
+      }
+    }
+    $all_clean_values: append($all_clean_values, $clean_values, comma);
+  }
+  @return $all_clean_values;
 }
