@@ -7,7 +7,7 @@ They *will not* choke on:
 - Values without units
 - Percentages and other non-convertible numeric values
 - Strings, like `auto`, `inherit`, and background image URLs
-- Multiple values, such as multiple background sizes
+- Multiple lists with multiple values, such as multiple background sizes
 - The dreaded `!important`
 
 
