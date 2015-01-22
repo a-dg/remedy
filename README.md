@@ -52,7 +52,7 @@ Begin by setting the output types and the base font size, then importing the fun
 $output_rem: true;
 $base_font_size: 16px;
 @import 'functions';
-@import 'mixin';
+@import 'mixins';
 ```
 
 
@@ -70,7 +70,7 @@ To use the mixin, specify the property, followed by the desired values, all with
 }
 ```
 
-Or combine multiple properties into one statement, separated by commas:
+Or combine multiple properties in one map, separated by commas:
 
 ```scss
 .combined {
@@ -132,4 +132,4 @@ Note: this *does not* round off the converted `rem` values, it only snaps the `p
 
 ## Credit where credit is due
 
-Mixin based on the [rem mixin by Ray Brown](https://github.com/bitmanic/rem). `strip_units()` function lifted from [Zurb Foundation](https://github.com/zurb/foundation).
+Mixin based on the [rem mixin by Ray Brown](https://github.com/bitmanic/rem). `strip_units()` function lifted from [Zurb Foundation](https://github.com/zurb/foundation). Map syntax inspired by the [rem mixin by Pierre Burel](https://github.com/pierreburel/sass-rem).

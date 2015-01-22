@@ -5,10 +5,10 @@ $output_rem: true;
 // Set base font size
 $base_font_size: 16px;
 
-// Import functions and/or mixin
-// Note: mixin requires several functions in _functions.scss
+// Import functions and/or mixins
+// Note: mixins require several functions in _functions.scss
 @import 'functions';
-@import 'mixin';
+@import 'mixins';
 
 // Using mixin
 .with-px-fallback {
