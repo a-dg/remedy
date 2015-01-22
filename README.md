@@ -2,7 +2,7 @@
 
 The `rem()` mixin and function allow you to convert any pixel-like CSS value (pixels or points) to its `rem` equivalent. They convert what they’re supposed to, and leave everything else alone.
 
-They will not choke on:
+They *will not* choke on:
 
 - Values without units
 - Percentages and other non-convertible numeric values
@@ -36,6 +36,17 @@ margin: r(7px 0 12px 20%); // Bonus shortcut!
 ```
 
 Both the mixin and the function make use of an included `strip_units()` function for proper operation.
+
+
+## Configuration
+
+Begin by setting your base font size, and importing the function and/or mixin. Note: the mixin requires the `strip_units()` function in [_function.scss](scss/_function.scss).
+
+```scss
+$base_font_size: 16px;
+@import 'function';
+@import 'mixin';
+```
 
 
 ## Intended usage

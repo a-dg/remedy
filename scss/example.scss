@@ -1,0 +1,25 @@
+// Set base font size
+$base_font_size: 16px;
+
+// Import rem function and/or mixin
+// Note: mixin requires strip_units() in _function.scss
+@import 'function';
+@import 'mixin';
+
+// Using mixin
+.with-px-fallback {
+  @include rem(margin, 20px auto);
+  @include rem(font-size, 28pt);
+  @include rem(border-top, 7px solid #f90 !important);
+  @include rem(background, #fff url('../img/icon.png') 15px 10px no-repeat);
+  @include rem(background-size, 44px auto, 50% 312px);
+}
+
+// Using function
+.no-px-fallback {
+  margin: r(20px auto);
+  font-size: r(28pt);
+  border-top: r(7px) solid #f90 !important;
+  background: r(#fff url('../img/icon.png') 15px 10px no-repeat);
+  background-size: r(44px auto, 50% 312px);
+}
