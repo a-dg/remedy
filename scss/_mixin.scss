@@ -41,7 +41,8 @@
         // and index($px_units, unit($value))
       {
         // Pixel-like units: calculate rem value from $base_font_size
-        $rem_value: ($value / $base_font_size);
+        $base_font_value: strip_units($base_font_size);
+        $rem_value: strip_units($value / $base_font_value);
         @if index($non_rounding_properties, $property) {
           $px_values: append($px_values, $value);
         } @else {
