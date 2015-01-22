@@ -42,9 +42,6 @@
       @if is_convertible($value) {
         // Pixel-like units: round
         $round_value: round($value);
-        @if is_zero($round_value) {
-          $round_value: 0;
-        }
         $round_values: append($round_values, $round_value);
       } @else {
         // Unitless and non-pixel units: pass through unmodified
