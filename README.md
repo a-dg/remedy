@@ -15,24 +15,30 @@ They *will not* choke on:
 
 Based on your needs, you can choose to use either the mixin or the function. You will likely not need to use both.
 
-### Mixin
+#### Mixin
 
 ```scss
-@include rem(margin, 7px 0 12px 20%);
+div {
+  @include rem(margin, 7px 0 12px 20%);
+}
 ```
 
 If you require a `px` fallback for browsers that don’t support `rem` units (IE 8), you should use the mixin. It will output two lines of compiled CSS: the first with `px` values, the second with `rem` values. Browsers that don’t support `rem` units will simply ignore the second line.
 
-### Function
+#### Function
 
 ```scss
-margin: rem(7px 0 12px 20%);
+div {
+  margin: rem(7px 0 12px 20%);
+}
 ```
 
 Let’s face it, the `@include` syntax for the mixin is long and tedious and you will hate looking at it. If you’re not developing for IE 8, you probably don’t need a `px` fallback, and you should therefore consider using the function. It’s nice and tidy.
 
 ```scss
-margin: r(7px 0 12px 20%); // Bonus shortcut!
+div {
+  margin: r(7px 0 12px 20%); // Bonus shortcut!
+}
 ```
 
 Both the mixin and the function make use of various attendant utility functions for proper operation.
