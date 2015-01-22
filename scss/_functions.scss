@@ -35,6 +35,40 @@
 }
 
 
+@function rr($original_values...) {
+  @return rem_round($original_values...);
+}
+@function rem_round($original_values...) {
+  $all_round_values: ();
+  @for $i from 1 through length($original_values) {
+    $round_values: ();
+    $values: nth($original_values, $i);
+    @each $value in $values {
+      $is_zero: is_zero($value);
+      $pass_through: is_pass_through($value);
+      // $is_convertible: is_convertible($value);
+      
+      @if $is_zero {
+        // Zero: enforce no units
+        $round_values: append($round_values, 0);
+      } @else if $pass_through {
+        // Unitless and non-pixel units: pass through unmodified
+        $round_values: append($round_values, $value);
+      } @else /* if $is_convertible */ {
+        // Pixel-like units: round
+        $round_value: round($value);
+        @if strip_units($value) == 0 {
+          $round_value: 0;
+        }
+        $round_values: append($round_values, $round_value);
+      }
+    }
+    $all_round_values: append($all_round_values, $round_values, comma);
+  }
+  @return rem($all_round_values...);
+}
+
+
 @function strip_units($num) {
   @return $num / (($num * 0) + 1);
 }

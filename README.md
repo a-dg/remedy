@@ -97,6 +97,20 @@ Since `rem()` will allow any garbage you throw its way to pass through unharmed,
 ```
 
 
+## Rounding values
+
+By default, the `rem()` function calculates `rem` values from the `px` values as they are passed in, without modifying them. If there’s a chance that the original `px` values are not integers, you can optionally round them off before converting to `rem` values. Do this by calling `rem_round()` as such:
+
+```scss
+div {
+  padding-left: rem_round($column_gutter / 3);
+  border-width: rr($offset * 0.7); // Shortcut!
+}
+```
+
+Note: this *does not* round off the converted `rem` values, it only snaps the `px` values to integers before converting them.
+
+
 ## Credit where credit is due
 
 Mixin based on the [rem mixin by Ray Brown](https://github.com/bitmanic/rem). `strip_units()` function lifted from [Zurb Foundation](https://github.com/zurb/foundation).
