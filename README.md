@@ -76,6 +76,8 @@ To use the function, wrap as much or as little of the value as you want in the p
 }
 ```
 
+See [example.scss](scss/example.scss) for a complete example of the configuration, imports, and usage.
+
 Remember, `rem()` leaves anything it can’t convert alone, so if you change a value from `13px` to `0`, or `50px` to `2.7`, or `24pt 2em` to `auto`, it doesn’t matter. You don’t need to go to the trouble of removing the mixin or function, and it will still work (by not doing any).
 
 
