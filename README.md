@@ -117,17 +117,60 @@ Since `rem()` will allow any garbage you throw its way to pass through unharmed,
 
 ## Rounding values
 
-By default, `rem` values are calculated from the `px` values as they are passed in, without modifying them. If there’s a chance that the original `px` values are not integers, you can optionally round them off before converting to `rem` values. Do this by calling the `rem_round()` mixin or function as such:
+The mixin and the function handle rounding in slightly different ways.
+
+Note: these methods *do not* round the converted `rem` values, they only snap the `px` values to integers before converting them.
+
+#### Function
+
+By default, `rem` values are calculated from the `px` values as they are passed in, without modifying them. If there’s a chance that the original `px` values are not integers, you can optionally round them before converting to `rem` values. Do this by calling the `rem_round()` function as such:
 
 ```scss
 div {
-  @include rem_round(margin, 20.3px 8.6px);
   padding-left: rem_round($column_gutter / 3);
   border-width: rr($offset * 0.7); // Shortcut!
 }
 ```
 
-Note: this *does not* round off the converted `rem` values, it only snaps the `px` values to integers before converting them.
+When working with the function, *you* decide which values need to be rounded.
+
+#### Mixin
+
+For once, the mixin has the upper hand here. Since it has access to the property that’s being converted, it can make informed decisions about which values to round, and which ones to leave alone.
+
+Most pixel-like values on dimensional properties — properties related to an element’s size, position, and box model — should be rounded. This applies to properties like `padding`, `width`, and `border`, but also to `text-indent`, `background-size`, and `marker-offset`.
+
+On the other hand, certain properties actually benefit from the subtle adjustments afforded by floating point values:
+
+- `font-size`
+- `letter-spacing`
+- `word-spacing`
+
+Something like `letter-spacing: 0.2px` can have a huge impact on legibility, so it’s worth preserving that value. Since the `rem()` mixin knows which property you’re converting, it can automatically preserve these exceptions and round the rest.
+
+```scss
+div {
+  @include rem((
+    margin: 20.3px,   // Rounded to 20px / 1.25rem
+    font-size: 20.3px // Not rounded / 1.26875rem
+  ));
+}
+```
+
+Of course, you can use the `rem_round()` mixin to explicitly round all pixel-like values, regardless of which property they belong to:
+
+```scss
+div {
+  @include rem_round((
+    margin: 20.3px,   // Rounded to 20px / 1.25rem
+    font-size: 20.3px // Rounded to 20px / 1.25rem
+  ));
+}
+```
+
+As you can see from those examples, using the `rem()` mixin provides the exact same output as the `rem_round()` mixin for all properties but the three exceptions: `font-size`, `letter-spacing`, and `word-spacing`.
+
+> **You deserve an explanation.** You’re probably never going to want `padding-top: 7.3px` on a paragraph, or set `height: 143.85px` on a div. And because the `rem` value is a faithful conversion of the `px` value, you’re probably never going to want the `rem` equivalents of those exact values, either. Unless you’re some kind of lunatic, or you’re nostalgic for the days of Flash development, when everything was blurry due to being misaligned by a half-pixel. It’s the `strftime("%C", strtotime("now"))`th century and we like our edges nice and crisp.
 
 
 ## Credit where credit is due
