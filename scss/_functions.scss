@@ -9,49 +9,36 @@
   $base_font_size: 16px !default;
   
   $all_rem_values: ();
-  @each $value_set in $original_values {
+  $separator: list-separator($original_values);
+  @each $value in $original_values {
     $rem_values: ();
-    @each $value in $value_set {
-      @if is_zero($value) {
-        // Zero: enforce no units
-        $rem_values: append($rem_values, 0);
-      } @else if is_convertible($value) {
-        // Pixel-like units: calculate rem value from $base_font_size
-        $base_font_value: strip_units($base_font_size);
-        $rem_value: strip_units($value / $base_font_value);
-        $rem_values: append($rem_values, #{$rem_value}rem);
-      } @else {
-        // Unitless and non-pixel units: pass through unmodified
-        $rem_values: append($rem_values, $value);
-      }
+    @if type-of($value) == list {
+      // List: process each value on its own
+      $rem_values: append($rem_values, rem($value...), $separator);
+    } @else if is_zero($value) {
+      // Zero: enforce no units
+      $rem_values: append($rem_values, 0, $separator);
+    } @else if is_convertible($value) {
+      // Pixel-like units: calculate rem value from $base_font_size
+      $base_font_value: strip_units($base_font_size);
+      $rem_value: strip_units($value / $base_font_value);
+      $rem_values: append($rem_values, #{$rem_value}rem, $separator);
+    } @else {
+      // Unitless and non-pixel units: pass through unmodified
+      $rem_values: append($rem_values, $value, $separator);
     }
-    $all_rem_values: append($all_rem_values, $rem_values, comma);
+    $all_rem_values: append($all_rem_values, $rem_values, $separator);
   }
   @return $all_rem_values;
 }
 
 
 @function rr($original_values...) {
-  $round_values: rem_round($original_values...);
-  @return rem($round_values...);
+  @return rem_round($original_values...);
 }
 @function rem_round($original_values...) {
-  $all_round_values: ();
-  @each $value_set in $original_values {
-    $round_values: ();
-    @each $value in $value_set {
-      @if is_convertible($value) {
-        // Pixel-like units: round
-        $round_value: round($value);
-        $round_values: append($round_values, $round_value);
-      } @else {
-        // Unitless and non-pixel units: pass through unmodified
-        $round_values: append($round_values, $value);
-      }
-    }
-    $all_round_values: append($all_round_values, $round_values, comma);
-  }
-  @return $all_round_values;
+  $round_values: round_px($original_values...);
+  @return rem($round_values...);
 }
 
 
@@ -70,20 +57,42 @@
     and not unitless($value)
     and index($px_units, unit($value));
 }
+@function round_px($original_values...) {
+  $all_round_values: ();
+  $separator: list-separator($original_values);
+  @each $value in $original_values {
+    $round_values: ();
+    @if type-of($value) == list {
+      // List: process each value on its own
+      $round_values: append($round_values, round_px($value...), $separator);
+    } @else if is_convertible($value) {
+      // Pixel-like units: round
+      $round_value: round($value);
+      $round_values: append($round_values, $round_value, $separator);
+    } @else {
+      // Unitless and non-pixel units: pass through unmodified
+      $round_values: append($round_values, $value, $separator);
+    }
+    $all_round_values: append($all_round_values, $round_values, $separator);
+  }
+  @return $all_round_values;
+}
 @function cleanup($original_values...) {
   $all_clean_values: ();
-  @each $value_set in $original_values {
+  $separator: list-separator($original_values);
+  @each $value in $original_values {
     $clean_values: ();
-    @each $value in $value_set {
-      @if is_zero($value) {
-        // Zero: enforce no units
-        $clean_values: append($clean_values, 0);
-      } @else {
-        // Non-zero: pass through unmodified
-        $clean_values: append($clean_values, $value);
-      }
+    @if type-of($value) == list {
+      // List: process each value on its own
+      $clean_values: append($clean_values, cleanup($value...), $separator);
+    } @else if is_zero($value) {
+      // Zero: enforce no units
+      $clean_values: append($clean_values, 0, $separator);
+    } @else {
+      // Non-zero: pass through unmodified
+      $clean_values: append($clean_values, $value, $separator);
     }
-    $all_clean_values: append($all_clean_values, $clean_values, comma);
+    $all_clean_values: append($all_clean_values, $clean_values, $separator);
   }
   @return $all_clean_values;
 }
