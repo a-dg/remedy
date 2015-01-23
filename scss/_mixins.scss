@@ -1,4 +1,4 @@
-@mixin rem($properties, $original_values...) {
+@mixin rem($properties, $values...) {
   @if type-of($properties) == map {
     @each $key in map-keys($properties) {
       @include rem($key, map-get($properties, $key)...);
@@ -11,29 +11,29 @@
     $property: $properties;
     $non_rounding_properties: 'font-size', 'letter-spacing', 'word-spacing';
     
-    $all_px_values: cleanup($original_values...);
+    $all_px: cleanup($values...);
     @if not index($non_rounding_properties, $property) {
-      $all_px_values: round_px($all_px_values...);
+      $all_px: round_px($all_px...);
     }
-    $all_rem_values: rem($all_px_values...);
+    $all_rem: rem($all_px...);
     
     @if
       $output_px and not $output_rem
       or (
         $output_px and $output_rem
-        and $all_px_values != $all_rem_values
+        and $all_px != $all_rem
       )
     {
-      #{$property}: $all_px_values;
+      #{$property}: $all_px;
     }
     @if $output_rem or not $output_px {
-      #{$property}: $all_rem_values;
+      #{$property}: $all_rem;
     }
   }
 }
 
 
-@mixin rem_round($original_values...) {
-  $round_values: round_px($original_values...);
-  @include rem($round_values...);
+@mixin rem_round($values...) {
+  $round: round_px($values...);
+  @include rem($round...);
 }

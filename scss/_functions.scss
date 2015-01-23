@@ -1,44 +1,44 @@
-@function r($original_values...) {
-  @return rem($original_values...);
+@function r($values...) {
+  @return rem($values...);
 }
-@function rem($original_values...) {
+@function rem($values...) {
   @if not $output_rem {
-    @return cleanup($original_values...);
+    @return cleanup($values...);
   }
   
   $base_font_size: 16px !default;
   
-  $all_rem_values: ();
-  $separator: list-separator($original_values);
-  @each $value in $original_values {
-    $rem_values: ();
+  $all_rem: ();
+  $separator: list-separator($values);
+  @each $value in $values {
+    $rem: ();
     @if type-of($value) == list {
       // List: process each value on its own
-      $rem_values: append($rem_values, rem($value...), $separator);
+      $rem: append($rem, rem($value...), $separator);
     } @else if is_zero($value) {
       // Zero: enforce no units
-      $rem_values: append($rem_values, 0, $separator);
+      $rem: append($rem, 0, $separator);
     } @else if is_convertible($value) {
       // Pixel-like units: calculate rem value from $base_font_size
       $base_font_value: strip_units($base_font_size);
       $rem_value: strip_units($value / $base_font_value);
-      $rem_values: append($rem_values, #{$rem_value}rem, $separator);
+      $rem: append($rem, #{$rem_value}rem, $separator);
     } @else {
       // Unitless and non-pixel units: pass through unmodified
-      $rem_values: append($rem_values, $value, $separator);
+      $rem: append($rem, $value, $separator);
     }
-    $all_rem_values: append($all_rem_values, $rem_values, $separator);
+    $all_rem: append($all_rem, $rem, $separator);
   }
-  @return $all_rem_values;
+  @return $all_rem;
 }
 
 
-@function rr($original_values...) {
-  @return rem_round($original_values...);
+@function rr($values...) {
+  @return rem_round($values...);
 }
-@function rem_round($original_values...) {
-  $round_values: round_px($original_values...);
-  @return rem($round_values...);
+@function rem_round($values...) {
+  $round: round_px($values...);
+  @return rem($round...);
 }
 
 
@@ -57,42 +57,41 @@
     and not unitless($value)
     and index($px_units, unit($value));
 }
-@function round_px($original_values...) {
-  $all_round_values: ();
-  $separator: list-separator($original_values);
-  @each $value in $original_values {
-    $round_values: ();
+@function round_px($values...) {
+  $all_round: ();
+  $separator: list-separator($values);
+  @each $value in $values {
+    $round: ();
     @if type-of($value) == list {
       // List: process each value on its own
-      $round_values: append($round_values, round_px($value...), $separator);
+      $round: append($round, round_px($value...), $separator);
     } @else if is_convertible($value) {
       // Pixel-like units: round
-      $round_value: round($value);
-      $round_values: append($round_values, $round_value, $separator);
+      $round: append($round, round($value), $separator);
     } @else {
       // Unitless and non-pixel units: pass through unmodified
-      $round_values: append($round_values, $value, $separator);
+      $round: append($round, $value, $separator);
     }
-    $all_round_values: append($all_round_values, $round_values, $separator);
+    $all_round: append($all_round, $round, $separator);
   }
-  @return $all_round_values;
+  @return $all_round;
 }
-@function cleanup($original_values...) {
-  $all_clean_values: ();
-  $separator: list-separator($original_values);
-  @each $value in $original_values {
-    $clean_values: ();
+@function cleanup($values...) {
+  $all_clean: ();
+  $separator: list-separator($values);
+  @each $value in $values {
+    $clean: ();
     @if type-of($value) == list {
       // List: process each value on its own
-      $clean_values: append($clean_values, cleanup($value...), $separator);
+      $clean: append($clean, cleanup($value...), $separator);
     } @else if is_zero($value) {
       // Zero: enforce no units
-      $clean_values: append($clean_values, 0, $separator);
+      $clean: append($clean, 0, $separator);
     } @else {
       // Non-zero: pass through unmodified
-      $clean_values: append($clean_values, $value, $separator);
+      $clean: append($clean, $value, $separator);
     }
-    $all_clean_values: append($all_clean_values, $clean_values, $separator);
+    $all_clean: append($all_clean, $clean, $separator);
   }
-  @return $all_clean_values;
+  @return $all_clean;
 }
