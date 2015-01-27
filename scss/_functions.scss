@@ -87,6 +87,9 @@
     } @else if is_zero($value) {
       // Zero: enforce no units
       $clean: append($clean, 0, $separator);
+    } @else if is_convertible($value) and unit($value) != 'px' {
+      // Pixel-like units: enforce px
+      $clean: append($clean, strip_units($value) * 1px, $separator);
     } @else {
       // Non-zero: pass through unmodified
       $clean: append($clean, $value, $separator);
