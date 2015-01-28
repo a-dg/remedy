@@ -1,14 +1,12 @@
-@mixin rem($properties, $values...) {
-  @if type-of($properties) == map {
-    @each $key in map-keys($properties) {
-      @include rem($key, map-get($properties, $key)...);
+@mixin rem($property, $values...) {
+  @if type-of($property) == map {
+    @each $key in map-keys($property) {
+      @include rem($key, map-get($property, $key)...);
     }
   } @else {
     $output_px: true !default;
     $output_rem: true !default;
     $base_font_size: 16px !default;
-    
-    $property: $properties;
     $non_rounding_properties: 'font-size', 'letter-spacing', 'word-spacing';
     
     $all_px: cleanup($values...);
