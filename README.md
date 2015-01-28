@@ -46,13 +46,12 @@ Both the mixin and the function make use of various attendant utility functions 
 
 ## Configuration
 
-Begin by setting the output types and the base font size, then importing the functions and/or mixin. Note: the mixin requires several functions in [_functions.scss](scss/_functions.scss).
+Begin by setting the output types and the base font size, then import [_rem.scss](scss/_rem.scss).
 
 ```scss
 $output_rem: true;
 $base_font_size: 16px;
-@import 'functions';
-@import 'mixins';
+@import 'rem';
 ```
 
 

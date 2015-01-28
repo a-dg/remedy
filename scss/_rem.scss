@@ -3,7 +3,7 @@
 }
 @function rem($values...) {
   @if not $output_rem {
-    @return cleanup($values...);
+    @return clean_values($values...);
   }
   
   $base_font_size: 16px !default;
@@ -42,6 +42,51 @@
 }
 
 
+@mixin r($values...) {
+  @include rem($values...);
+}
+@mixin rem($property, $values...) {
+  @if type-of($property) == map {
+    @each $key in map-keys($property) {
+      @include rem($key, map-get($property, $key)...);
+    }
+  } @else {
+    $output_px: true !default;
+    $output_rem: true !default;
+    $base_font_size: 16px !default;
+    $non_rounding_properties: 'font-size', 'letter-spacing', 'word-spacing';
+    
+    $all_px: clean_values($values...);
+    @if not index($non_rounding_properties, $property) {
+      $all_px: round_px($all_px...);
+    }
+    $all_rem: rem($all_px...);
+    
+    @if
+      $output_px and not $output_rem
+      or (
+        $output_px and $output_rem
+        and $all_px != $all_rem
+      )
+    {
+      #{$property}: $all_px;
+    }
+    @if $output_rem or not $output_px {
+      #{$property}: $all_rem;
+    }
+  }
+}
+
+
+@mixin rr($values...) {
+  @include rem_round($values...);
+}
+@mixin rem_round($values...) {
+  $round: round_px($values...);
+  @include rem($round...);
+}
+
+
 @function strip_units($num) {
   @return $num / (($num * 0) + 1);
 }
@@ -76,14 +121,14 @@
   }
   @return $all_round;
 }
-@function cleanup($values...) {
+@function clean_values($values...) {
   $all_clean: ();
   $separator: list-separator($values);
   @each $value in $values {
     $clean: ();
     @if type-of($value) == list {
       // List: process each value on its own
-      $clean: append($clean, cleanup($value...), $separator);
+      $clean: append($clean, clean_values($value...), $separator);
     } @else if is_zero($value) {
       // Zero: enforce no units
       $clean: append($clean, 0, $separator);
@@ -91,7 +136,7 @@
       // Pixel-like units: enforce px
       $clean: append($clean, strip_units($value) * 1px, $separator);
     } @else {
-      // Non-zero: pass through unmodified
+      // Unitless and pixel units: pass through unmodified
       $clean: append($clean, $value, $separator);
     }
     $all_clean: append($all_clean, $clean, $separator);
