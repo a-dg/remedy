@@ -2,6 +2,7 @@
   @return rem($values...);
 }
 @function rem($values...) {
+  $output_rem: true !default;
   @if not $output_rem {
     @return clean_values($values...);
   }
