@@ -11,21 +11,20 @@
   $all_rem: ();
   $separator: list-separator($values);
   @each $value in $values {
-    $rem: ();
+    $rem: null;
     @if type-of($value) == list {
       // List: process each value on its own
-      $rem: append($rem, rem($value...), $separator);
+      $rem: rem($value...);
     } @else if is_zero($value) {
       // Zero: enforce no units
-      $rem: append($rem, 0, $separator);
+      $rem: 0;
     } @else if is_convertible($value) {
       // Pixel-like units: calculate rem value from $base_font_size
       $base_font_value: strip_units($base_font_size);
-      $rem_value: strip_units($value / $base_font_value);
-      $rem: append($rem, #{$rem_value}rem, $separator);
+      $rem: (strip_units($value / $base_font_value) * 1rem);
     } @else {
       // Unitless and non-pixel units: pass through unmodified
-      $rem: append($rem, $value, $separator);
+      $rem: $value;
     }
     $all_rem: append($all_rem, $rem, $separator);
   }
@@ -106,16 +105,16 @@
   $all_round: ();
   $separator: list-separator($values);
   @each $value in $values {
-    $round: ();
+    $round: null;
     @if type-of($value) == list {
       // List: process each value on its own
-      $round: append($round, round_px($value...), $separator);
+      $round: round_px($value...);
     } @else if is_convertible($value) {
       // Pixel-like units: round
-      $round: append($round, round($value), $separator);
+      $round: round($value);
     } @else {
       // Unitless and non-pixel units: pass through unmodified
-      $round: append($round, $value, $separator);
+      $round: $value;
     }
     $all_round: append($all_round, $round, $separator);
   }
@@ -125,19 +124,19 @@
   $all_clean: ();
   $separator: list-separator($values);
   @each $value in $values {
-    $clean: ();
+    $clean: null;
     @if type-of($value) == list {
       // List: process each value on its own
-      $clean: append($clean, clean_values($value...), $separator);
+      $clean: clean_values($value...);
     } @else if is_zero($value) {
       // Zero: enforce no units
-      $clean: append($clean, 0, $separator);
+      $clean: 0;
     } @else if is_convertible($value) and unit($value) != 'px' {
       // Pixel-like units: enforce px
-      $clean: append($clean, strip_units($value) * 1px, $separator);
+      $clean: (strip_units($value) * 1px);
     } @else {
       // Unitless and pixel units: pass through unmodified
-      $clean: append($clean, $value, $separator);
+      $clean: $value;
     }
     $all_clean: append($all_clean, $clean, $separator);
   }
