@@ -7,7 +7,8 @@ The `rem()` mixin and function allow you to convert any pixel-like CSS value (pi
 
 - Automatically remove units from zero values: `0px` becomes `0`
 - Optionally round values: `6.25px` becomes `6px` and/or `0.375rem`
-- Handy shortcut names: use `rem()` or `r()`, and `rem_round()` or `rr()`
+- Handy aliases: use `rem()` or `r()`, and `rem_round()` or `rr()`
+- *Thorough-ass* documentation
 - Pass any values whatsoever, they *will not* choke on anything:
   - Values without units
   - Percentages and other non-convertible numeric values
@@ -30,7 +31,7 @@ The `rem()` mixin and function allow you to convert any pixel-like CSS value (pi
 
 Based on your needs, you can choose to use either the mixin or the function. You will likely not need to use both.
 
-#### Mixin
+#### Mixin syntax
 
 ```scss
 div {
@@ -40,7 +41,7 @@ div {
 
 If you require a `px` fallback for browsers that don’t support `rem` units (IE 8), you should use the mixin. It will output two lines of compiled CSS: the first with `px` values, the second with `rem` values. Browsers that don’t support `rem` units will simply ignore the second line.
 
-#### Function
+#### Function syntax
 
 ```scss
 div {
@@ -125,9 +126,9 @@ Since `rem()` will allow any garbage you throw its way to pass through unharmed,
 
 The mixin and the function handle rounding in slightly different ways.
 
-> Note: these methods *do not* round the converted `rem` values, they only snap the `px` values to integers before converting them.
+> Note: these methods *do not* round the converted `rem` values, they only snap the `px` values to integers before converting them. Rounding `rem` values would be considered uncouth.
 
-#### Function
+#### Function rounding
 
 By default, `rem` values are calculated from the `px` values as they are passed in, without modifying them. If there’s a chance that the original `px` values are not integers, you can optionally round them before converting to `rem` values. Do this by calling the `rem_round()` function as such:
 
@@ -140,7 +141,7 @@ div {
 
 When working with the function, *you* decide which values need to be rounded.
 
-#### Mixin
+#### Mixin rounding
 
 For once, the mixin has the upper hand here. Since it has access to the property that’s being converted, it can make informed decisions about which values to round, and which ones to leave alone.
 
