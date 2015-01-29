@@ -97,6 +97,18 @@
 }
 @function is_convertible($value) {
   $px_units: 'px', 'pt';
+  $unitless_mode: false !default;
+  @if $unitless_mode {
+    @return
+      type-of($value) == number
+      and (
+        unitless($value)
+        or (
+          not unitless($value)
+          and index($px_units, unit($value))
+        )
+      );
+  }
   @return
     type-of($value) == number
     and not unitless($value)

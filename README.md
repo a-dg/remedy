@@ -179,6 +179,43 @@ Using the `rem()` mixin provides the exact same output as the `rem_round()` mixi
 > **You deserve an explanation.** You’re probably never going to want `padding-top: 7.3px` on a paragraph, or set `height: 143.85px` on a div. And because the `rem` value is a faithful conversion of the `px` value, you’re also probably never going to want the `rem` equivalents of those exact values, unless you’re some kind of lunatic, or you’re nostalgic for the days of Flash development, when everything was blurry due to being misaligned by a half-pixel. It’s the `strftime('%C', strtotime('now'))`th century and we like our edges nice and crisp.
 
 
+## Unitless mode
+
+No good can possibly come from this. But if you’re used to [Foundation](https://github.com/zurb/foundation)’s `rem-calc()` function syntax, you’ll perhaps be more at home with this atrocity enabled.
+
+```scss
+$unitless_mode: true; // No
+```
+
+By denying Christ and enabling this deplorable option, you fling yourself into a world of needless confusion and make life measurably more terrible by allowing this syntax:
+
+```scss
+.why-would-you {
+  @include rem(margin, 15 30 0 8);
+  font-size: r(22);
+}
+```
+
+Unitless mode assumes you’re being a total jerk and will automatically treat unitless values as pixels.
+
+> Even while I was typing out the above example, I accidentally added `px` to the values, because I am a decent human being, and to omit the units would be to act in opposition to said decency. Seek help.
+
+Please note that using unitless mode is hurtful and prevents `rem()` from allowing actual, meaningfully-unitless values to pass through unharmed. That means you can’t do this:
+
+```scss
+.asplode {
+  @include rem((
+    margin: 20 18,
+    padding-left: 8,
+    z-index: 9999,   // 9999px
+    line-height: 1.4 // 1.4px
+  ));
+}
+```
+
+Under normal circumstances, `rem()` would let you be quick and still get the result you need, even if you don’t want to take the time to move `z-index` or `line-height` out of the mixin. But by using unitless mode, you surrender this functionality in favor of quicker one-handed typing while you rub one out under your desk.
+
+
 ## Credit where credit is due
 
 Mixin based on the [rem mixin by Ray Brown](https://github.com/bitmanic/rem). `strip_units()` function lifted from [Zurb Foundation](https://github.com/zurb/foundation). Map syntax inspired by the [rem mixin by Pierre Burel](https://github.com/pierreburel/sass-rem).
