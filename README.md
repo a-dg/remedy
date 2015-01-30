@@ -7,22 +7,22 @@ The `rem()` mixin and function allow you to convert any pixel-like CSS value (pi
 
 - Automatically remove units from zero values: `0px` becomes `0`
 - Optionally round values: `6.25px` becomes `6px` and/or `0.375rem`
-- Handy aliases: use `rem()` or `r()`, and `rem_round()` or `rr()`
-- *Thorough-ass* documentation
+- Handy shortcut aliases: use `rem()` or `r()`, and `rem_round()` or `rr()`
 - Pass any values whatsoever, they *will not* choke on anything:
   - Values without units
   - Percentages and other non-convertible numeric values
   - Strings, like `auto`, `inherit`, and background image URLs
   - Multiple lists of multiple values, such as multiple background sizes
   - The dreaded `!important`
+- *Thorough-ass* documentation
 
 #### Additional mixin features
 - Optionally provides a `px` fallback
 - Removes duplicate lines if `px` fallback matches `rem` output
-- Automatically rounds values intelligently based on property name
+- Automatically [rounds values intelligently](#mixin-rounding) based on property name
 
 #### Additional function features
-- Shortest possible syntax that is not plain CSS
+- [Shortest possible syntax](#function-syntax) that is not plain CSS
 - Won’t wreak havoc on your syntax highlighting
 - It’s really short
 
@@ -36,6 +36,7 @@ Based on your needs, you can choose to use either the mixin or the function. You
 ```scss
 div {
   @include rem(margin, 7px 0 12px 20%);
+  @include r(left, 56px); // Shortcut!
 }
 ```
 
@@ -46,6 +47,7 @@ If you require a `px` fallback for browsers that don’t support `rem` units (IE
 ```scss
 div {
   margin: rem(7px 0 12px 20%);
+  left: r(56px); // Shortcut!
 }
 ```
 
@@ -57,6 +59,7 @@ Let’s face it, the `@include` syntax for the mixin is long and tedious and you
 Begin by setting the output types and the base font size, then import [_rem.scss](scss/_rem.scss).
 
 ```scss
+$output_px: true;
 $output_rem: true;
 $base_font_size: 16px;
 @import 'rem';
@@ -208,8 +211,8 @@ Please note that using unitless mode is hurtful and prevents `rem()` from allowi
   @include rem((
     margin: 20 18,
     padding-left: 8,
-    z-index: 9999,   // 9999px
-    line-height: 1.4 // 1.4px
+    z-index: 9999,   // 9999px? As if.
+    line-height: 1.4 // 1.4px? Not even.
   ));
 }
 ```
