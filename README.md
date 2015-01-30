@@ -6,9 +6,9 @@ The `rem()` mixin and function allow you to convert any pixel-like CSS value (pi
 ## Capabilities
 
 - Automatically remove units from zero values: `0px` becomes `0`
-- Optionally round values: `6.25px` becomes `6px` and/or `0.375rem`
+- Optionally round values: `6.25px` becomes `6px` and `0.375rem`
 - Handy shortcut aliases: use `rem()` or `r()`, and `rem_round()` or `rr()`
-- Pass any values whatsoever, they *will not* choke on anything:
+- Pass any values whatsoever, `rem()` *will not* choke on anything:
   - Values without units
   - Percentages and other non-convertible numeric values
   - Strings, like `auto`, `inherit`, and background image URLs
