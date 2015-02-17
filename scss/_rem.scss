@@ -53,13 +53,22 @@
   } @else {
     $output_px: true !default;
     $output_rem: true !default;
+    $unitless_mode: false !default;
     $base_font_size: 16px !default;
     
-    $all_px: clean_values($values...);
-    @if is_roundable($property) {
-      $all_px: round_px($all_px...);
+    $all_px: null;
+    $all_rem: null;
+    
+    @if $unitless_mode and is_inherently_unitless($property, $values...) {
+      $all_px: $values;
+      $all_rem: $values;
+    } @else {
+      $all_px: clean_values($values...);
+      @if is_roundable($property) {
+        $all_px: round_px($all_px...);
+      }
+      $all_rem: rem($all_px...);
     }
-    $all_rem: rem($all_px...);
     
     @if
       $output_px and not $output_rem
@@ -116,6 +125,22 @@
 @function is_roundable($property) {
   $non_rounding_properties: font-size, letter-spacing, word-spacing;
   @return not index($non_rounding_properties, $property)
+}
+@function is_inherently_unitless($property, $values...) {
+  $non_convertible_properties: counter-increment, counter-reset, font-weight, pitch-range, richness, stress, volume, z-index, zoom;
+  
+  // In unitless mode, line-height values greater than
+  // or equal to this variable are assumed to be pixels
+  // instead of relative, and will be converted
+  $line_height_assume_px_min: 6;
+  
+  @return
+    index($non_convertible_properties, $property)
+    or (
+      $property == line-height
+      and length($values) == 1
+      and strip_units($values...) < $line_height_assume_px_min
+    );
 }
 @function round_px($values...) {
   $all_round: ();

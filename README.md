@@ -204,20 +204,44 @@ Unitless mode assumes you’re being a total jerk and will automatically treat u
 
 > Even while I was typing out the above example, I accidentally added `px` to the values, because I am a decent human being, and to omit the units would be to act in opposition to said decency. Seek help.
 
-Please note that using unitless mode is hurtful and prevents `rem()` from allowing actual, meaningfully-unitless values to pass through unharmed. That means you can’t do this:
+#### Unitless mixin
+
+The mixin uses the property name to determine if the value should be converted, thereby enabling quicker one-handed typing while you rub one out under your desk.
 
 ```scss
-.asplode {
+.sigh {
   @include rem((
-    margin: 20 18,
-    padding-left: 8,
-    z-index: 9999,   // 9999px? As if.
-    line-height: 1.4 // 1.4px? Not even.
+    margin: 20 18,   // 20px 18px
+    padding-left: 8, // 8px
+    z-index: 9999,   // 9999
+    font-weight: 700 // 700
   ));
 }
 ```
 
-Under normal circumstances, `rem()` would let you be quick and still get the result you need, even if you don’t want to take the time to move `z-index` or `line-height` out of the mixin. But by using unitless mode, you surrender this functionality in favor of quicker one-handed typing while you rub one out under your desk.
+Since `line-height` can be either unitless or not, the mixin intelligently decides which value you intended. Values greater than or equal to `6` will be treated as pixels.
+
+```scss
+.eye-roll {
+  @include rem(line-height, 22);  // 22px
+  @include rem(line-height, 1.6); // 1.6
+}
+```
+
+#### Unitless function
+
+Please note that using the function in unitless mode is hurtful and prevents actual, meaningfully-unitless values from passing through unharmed. That means you can’t do this:
+
+```scss
+.asplode {
+  margin: r(20 18);
+  padding-left: r(8);
+  z-index: r(9999);    // 9999px? As if.
+  line-height: r(1.4); // 1.4px? Not even.
+}
+```
+
+Under normal circumstances, `rem()` would let you be quick and still get the result you need, even if you don’t want to take the time to remove the function from a value that doesn’t need to be (or *shouldn’t* be) converted. But by using unitless mode, you surrender this functionality in favor of eternal damnation.
 
 
 ## Credit where credit is due
