@@ -54,10 +54,9 @@
     $output_px: true !default;
     $output_rem: true !default;
     $base_font_size: 16px !default;
-    $non_rounding_properties: font-size, letter-spacing, word-spacing;
     
     $all_px: clean_values($values...);
-    @if not index($non_rounding_properties, $property) {
+    @if is_roundable($property) {
       $all_px: round_px($all_px...);
     }
     $all_rem: rem($all_px...);
@@ -113,6 +112,10 @@
     type-of($value) == number
     and not unitless($value)
     and index($px_units, unit($value));
+}
+@function is_roundable($property) {
+  $non_rounding_properties: font-size, letter-spacing, word-spacing;
+  @return not index($non_rounding_properties, $property)
 }
 @function round_px($values...) {
   $all_round: ();
