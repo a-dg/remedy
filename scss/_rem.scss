@@ -54,7 +54,7 @@
     $output_px: true !default;
     $output_rem: true !default;
     $base_font_size: 16px !default;
-    $non_rounding_properties: 'font-size', 'letter-spacing', 'word-spacing';
+    $non_rounding_properties: font-size, letter-spacing, word-spacing;
     
     $all_px: clean_values($values...);
     @if not index($non_rounding_properties, $property) {
