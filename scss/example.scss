@@ -8,6 +8,15 @@ $base_font_size: 16px;
 // Import functions and mixins
 @import 'rem';
 
+// Using function
+.using-function {
+  margin: r(20px auto);
+  font-size: r(28pt);
+  border-top: r(7px) solid #f90 !important;
+  background: r(#fff url('../img/icon.png') 15px 10px no-repeat);
+  background-size: r(44px auto, 50% 312px);
+}
+
 // Using mixin
 .with-px-fallback {
   @include rem(margin, 20.2px auto);
@@ -22,15 +31,6 @@ $base_font_size: 16px;
     border-top: 7px solid #f90 !important,
     background-size: (44px auto, 50% 312px)
   ));
-}
-
-// Using function
-.no-px-fallback {
-  margin: r(20px auto);
-  font-size: r(28pt);
-  border-top: r(7px) solid #f90 !important;
-  background: r(#fff url('../img/icon.png') 15px 10px no-repeat);
-  background-size: r(44px auto, 50% 312px);
 }
 
 // Rounding px before converting to rem
