@@ -19,8 +19,8 @@ $base_font_size: 16px;
 
 // Using mixin
 .with-px-fallback {
-  @include rem(margin, 20.2px auto);
-  @include rem(font-size, 28.2pt);
+  @include rem(margin, 20px auto);
+  @include rem(font-size, 28pt);
   @include rem(border-top, 7px solid #f90 !important);
   @include rem(background, #fff url('../img/icon.png') 15px 10px no-repeat);
   @include rem(background-size, 44px auto, 50% 312px);
@@ -31,9 +31,15 @@ $base_font_size: 16px;
     border-top: 7px solid #f90 !important,
     background-size: (44px auto, 50% 312px),
   ));
+  
+  // Automatic rounding where appropriate
+  @include rem((
+    margin: 20.2px auto, // Automatically rounded
+    font-size: 28.2pt, // Not rounded
+  ));
 }
 
-// Rounding px before converting to rem
+// Explicitly round px before converting to rem
 .rounded {
   @include rem_round(margin, 20.3px 8.6px);
   padding-left: rem_round(13px / 3);
