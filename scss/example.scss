@@ -29,7 +29,7 @@ $base_font_size: 16px;
   @include rem((
     margin: 20px auto,
     border-top: 7px solid #f90 !important,
-    background-size: (44px auto, 50% 312px)
+    background-size: (44px auto, 50% 312px),
   ));
 }
 

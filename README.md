@@ -87,7 +87,7 @@ Or combine multiple properties in one map, separated by commas:
   @include rem((
     margin: 20px auto,
     border-top: 7px solid #f90 !important,
-    background-size: (44px auto, 50% 312px)
+    background-size: (44px auto, 50% 312px),
   ));
 }
 ```
@@ -161,8 +161,8 @@ Something like `letter-spacing: 0.2px` can have a huge impact on legibility, so 
 ```scss
 div {
   @include rem((
-    margin: 20.3px,   // Rounded to 20px / 1.25rem
-    font-size: 20.3px // Not rounded / 1.26875rem
+    margin: 20.3px,    // Rounded to 20px / 1.25rem
+    font-size: 20.3px, // Not rounded / 1.26875rem
   ));
 }
 ```
@@ -172,8 +172,8 @@ Of course, you can use the `rem_round()` mixin to explicitly round all pixel-lik
 ```scss
 div {
   @include rem_round((
-    margin: 20.3px,   // Rounded to 20px / 1.25rem
-    font-size: 20.3px // Rounded to 20px / 1.25rem
+    margin: 20.3px,    // Rounded to 20px / 1.25rem
+    font-size: 20.3px, // Rounded to 20px / 1.25rem
   ));
 }
 ```
@@ -211,10 +211,10 @@ The mixin uses the property name to determine if the value should be converted, 
 ```scss
 .sigh {
   @include rem((
-    margin: 20 18,   // 20px 18px
-    padding-left: 8, // 8px
-    z-index: 9999,   // 9999
-    font-weight: 700 // 700
+    margin: 20 18,    // 20px 18px
+    padding-left: 8,  // 8px
+    z-index: 9999,    // 9999
+    font-weight: 700, // 700
   ));
 }
 ```
