@@ -71,7 +71,7 @@ $base_font_size: 16px;
 To use the mixin, specify the property, followed by the desired values, all within the parentheses:
 
 ```scss
-.with-px-fallback {
+div {
   @include rem(margin, 20px auto);
   @include rem(font-size, 28pt);
   @include rem(border-top, 7px solid #f90 !important);
@@ -83,7 +83,7 @@ To use the mixin, specify the property, followed by the desired values, all with
 Or combine multiple properties in one map, separated by commas:
 
 ```scss
-.combined {
+div {
   @include rem((
     margin: 20px auto,
     border-top: 7px solid #f90 !important,
@@ -95,7 +95,7 @@ Or combine multiple properties in one map, separated by commas:
 To use the function, wrap as much or as little of the value as you want in the parentheses:
 
 ```scss
-.no-px-fallback {
+div {
   margin: r(20px auto);
   font-size: r(28pt);
   border-top: r(7px) solid #f90 !important;

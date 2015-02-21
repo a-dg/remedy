@@ -18,7 +18,7 @@ $base_font_size: 16px;
 }
 
 // Using mixin
-.with-px-fallback {
+.using-mixin {
   @include rem(margin, 20px auto);
   @include rem(font-size, 28pt);
   @include rem(border-top, 7px solid #f90 !important);
