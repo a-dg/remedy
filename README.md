@@ -53,9 +53,7 @@ div {
 
 Let’s face it, the `@include` syntax for the mixin is long and tedious and you will hate looking at it. If you’re not developing for IE 8, you probably don’t need a `px` fallback, and you should therefore consider using the function. It’s nice and tidy.
 
-#### Bonus confusion
-
-If you’re really sharp, you can compile two different CSS files — one for `px` and one for `rem` — then selectively load either file depending on the environment. Easily tweak `px` values locally, while delighting nerds with your `rem` usage on production. So while the `rem()` function can’t generate a `px` fallback, compiling multiple CSS files makes working with different units possible.
+> **Bonus confusion:** If you’re really sharp, you can compile two different CSS files — one for `px` and one for `rem` — then selectively load either file depending on the environment. Easily tweak `px` values locally, while delighting nerds with your `rem` usage on production. So while the `rem()` function can’t generate a `px` fallback, compiling multiple CSS files makes working with different units possible.
 
 
 ## Configuration
