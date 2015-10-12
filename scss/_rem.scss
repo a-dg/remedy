@@ -70,12 +70,8 @@
       $all_rem: rem($all_px...);
     }
     
-    @if
-      $output_px and not $output_rem
-      or (
-        $output_px and $output_rem
-        and $all_px != $all_rem
-      )
+    @if ($output_px and not $output_rem)
+      or ($output_px and $output_rem and $all_px != $all_rem)
     {
       #{$property}: $all_px;
     }
