@@ -1,14 +1,14 @@
-# rem()
+# Remedy
 
-The `rem()` mixin and function allow you to convert any pixel-like CSS value (pixels or points) to its `rem` equivalent. They convert what they’re supposed to, and leave everything else alone.
+The Remedy mixin and function allow you to convert any pixel-like CSS value (pixels or points) to its `rem` equivalent. They convert what they’re supposed to, and leave everything else alone.
 
 
 ## Capabilities
 
 - Automatically remove units from zero values: `0px` becomes `0`
 - Optionally round values: `6.25px` becomes `6px` and `0.375rem`
-- Handy shortcut aliases: use `rem()` or `r()`, and `rem_round()` or `rr()`
-- Pass any values whatsoever, `rem()` *will not* choke on anything:
+- Handy shortcut aliases: use `remedy()` or `r()`, and `remedy_round()` or `rr()`
+- Pass any values whatsoever, Remedy *will not* choke on anything:
   - Values without units
   - Percentages and other non-convertible numeric values
   - Strings, like `auto`, `inherit`, and background image URLs
@@ -35,7 +35,7 @@ Based on your needs, you can choose to use either the mixin or the function. You
 
 ```scss
 div {
-  @include rem(margin, 7px 0 12px 20%);
+  @include remedy(margin, 7px 0 12px 20%);
   @include r(left, 56px); // Shortcut!
 }
 ```
@@ -46,25 +46,25 @@ If you require a `px` fallback for browsers that don’t support `rem` units (IE
 
 ```scss
 div {
-  margin: rem(7px 0 12px 20%);
+  margin: remedy(7px 0 12px 20%);
   left: r(56px); // Shortcut!
 }
 ```
 
 Let’s face it, the `@include` syntax for the mixin is long and tedious and you will hate looking at it. If you’re not developing for IE 8, you probably don’t need a `px` fallback, and you should therefore consider using the function. It’s nice and tidy.
 
-> **Bonus confusion:** If you’re really sharp, you can compile two different CSS files — one for `px` and one for `rem` — then selectively load either file depending on the environment. Easily tweak `px` values locally, while delighting nerds with your `rem` usage on production. So while the `rem()` function can’t generate a `px` fallback, compiling multiple CSS files makes working with different units possible.
+> **Bonus confusion:** If you’re really sharp, you can compile two different CSS files — one for `px` and one for `rem` — then selectively load either file depending on the environment. Easily tweak `px` values locally, while delighting nerds with your `rem` usage on production. So while the `remedy()` function can’t generate a `px` fallback, compiling multiple CSS files makes working with different units possible.
 
 
 ## Configuration
 
-Begin by setting the output types and the base font size, then import [_rem.scss](scss/_rem.scss).
+Begin by setting the output types and the base font size, then import `_remedy.scss`.
 
 ```scss
 $output_px: true;
 $output_rem: true;
-$base_font_size: 16px;
-@import 'rem';
+$global_font_size: 16px;
+@import 'remedy';
 ```
 
 
@@ -74,11 +74,11 @@ To use the mixin, specify the property, followed by the desired values, all with
 
 ```scss
 div {
-  @include rem(margin, 20px auto);
-  @include rem(font-size, 28pt);
-  @include rem(border-top, 7px solid #f90 !important);
-  @include rem(background, #fff url('../img/icon.png') 15px 10px no-repeat);
-  @include rem(background-size, 44px auto, 50% 312px);
+  @include remedy(margin, 20px auto);
+  @include remedy(font-size, 28pt);
+  @include remedy(border-top, 7px solid #f90 !important);
+  @include remedy(background, #fff url('../img/icon.png') 15px 10px no-repeat);
+  @include remedy(background-size, 44px auto, 50% 312px);
 }
 ```
 
@@ -86,7 +86,7 @@ Or combine multiple properties in one map, separated by commas:
 
 ```scss
 div {
-  @include rem((
+  @include remedy((
     margin: 20px auto,
     border-top: 7px solid #f90 !important,
     background-size: (44px auto, 50% 312px),
@@ -108,12 +108,12 @@ div {
 
 See [example.scss](scss/example.scss) for a complete example of the configuration and usage.
 
-> Remember, `rem()` leaves anything it can’t convert alone, so if you change a value from `13px` to `0`, or `50px` to `2.7`, or `24pt 2em` to `auto`, it doesn’t matter. You don’t need to go to the trouble of removing the mixin or function, and it will still work (by not doing any).
+> Remember, Remedy leaves anything it can’t convert alone, so if you change a value from `13px` to `0`, or `50px` to `2.7`, or `24pt 2em` to `auto`, it doesn’t matter. You don’t need to go to the trouble of removing the mixin or function, and it will still work.
 
 
 ## Flagrantly irresponsible usage
 
-Since `rem()` will allow any garbage you throw its way to pass through unharmed, it is basically unbreakable.
+Since Remedy will allow any garbage you throw its way to pass through unharmed, it is basically unbreakable.
 
 ```scss
 .nonsense {
@@ -135,11 +135,11 @@ The mixin and the function handle rounding in slightly different ways.
 
 #### Function rounding
 
-By default, `rem` values are calculated from the `px` values as they are passed in, without modifying them. If there’s a chance that the original `px` values are not integers, you can optionally round them before converting to `rem` values. Do this by calling the `rem_round()` function as such:
+By default, `rem` values are calculated from the `px` values as they are passed in, without modifying them. If there’s a chance that the original `px` values are not integers, you can optionally round them before converting to `rem` values. Do this by calling the `remedy_round()` function as such:
 
 ```scss
 div {
-  padding-left: rem_round($column_gutter / 3);
+  padding-left: remedy_round($column_gutter / 3);
   border-width: rr($offset * 0.7); // Shortcut!
 }
 ```
@@ -158,31 +158,29 @@ On the other hand, certain properties actually benefit from the subtle adjustmen
 - `letter-spacing`
 - `word-spacing`
 
-Something like `letter-spacing: 0.2px` can have a huge impact on legibility, so it’s worth preserving that value. Since the `rem()` mixin knows which property you’re converting, it can automatically preserve these exceptions and round the rest.
+Something like `letter-spacing: 0.2px` can have a huge impact on legibility, so it’s worth preserving that value. Since the `remedy()` mixin knows which property you’re converting, it can automatically preserve these exceptions and round the rest.
 
 ```scss
 div {
-  @include rem((
+  @include remedy((
     margin: 20.3px,    // Rounded to 20px / 1.25rem
     font-size: 20.3px, // Not rounded / 1.26875rem
   ));
 }
 ```
 
-Of course, you can use the `rem_round()` mixin to explicitly round all pixel-like values, regardless of which property they belong to:
+Of course, you can use the `remedy_round()` mixin to explicitly round all pixel-like values, regardless of which property they belong to:
 
 ```scss
 div {
-  @include rem_round((
+  @include remedy_round((
     margin: 20.3px,    // Rounded to 20px / 1.25rem
     font-size: 20.3px, // Rounded to 20px / 1.25rem
   ));
 }
 ```
 
-Using the `rem()` mixin provides the exact same output as the `rem_round()` mixin for all properties but the three exceptions: `font-size`, `letter-spacing`, and `word-spacing`.
-
-> **You deserve an explanation.** You’re probably never going to want `padding-top: 7.3px` on a paragraph, or set `height: 143.85px` on a div. And because the `rem` value is a faithful conversion of the `px` value, you’re also probably never going to want the `rem` equivalents of those exact values, unless you’re some kind of lunatic, or you’re nostalgic for the days of Flash development, when everything was blurry due to being misaligned by a half-pixel. It’s the `strftime('%C', strtotime('now'))`th century and we like our edges nice and crisp.
+Using the `remedy()` mixin provides the exact same output as the `remedy_round()` mixin for all properties but the three exceptions: `font-size`, `letter-spacing`, and `word-spacing`.
 
 
 ## Unitless mode
@@ -197,7 +195,7 @@ By denying Christ and enabling this deplorable option, you fling yourself into a
 
 ```scss
 .why-would-you {
-  @include rem(margin, 15 30 0 8);
+  @include remedy(margin, 15 30 0 8);
   font-size: r(22);
 }
 ```
@@ -212,7 +210,7 @@ The mixin uses the property name to determine if the value should be converted, 
 
 ```scss
 .sigh {
-  @include rem((
+  @include remedy((
     margin: 20 18,    // 20px 18px
     padding-left: 8,  // 8px
     z-index: 9999,    // 9999
@@ -225,8 +223,8 @@ Since `line-height` can be either unitless or not, the mixin intelligently decid
 
 ```scss
 .eye-roll {
-  @include rem(line-height, 22);  // 22px
-  @include rem(line-height, 1.6); // 1.6
+  @include remedy(line-height, 22);  // 22px
+  @include remedy(line-height, 1.6); // 1.6
 }
 ```
 
@@ -243,7 +241,7 @@ Please note that using the function in unitless mode is hurtful and prevents act
 }
 ```
 
-Under normal circumstances, `rem()` would let you be quick and still get the result you need, even if you don’t want to take the time to remove the function from a value that doesn’t need to be (or *shouldn’t* be) converted. But by using unitless mode, you surrender this functionality in favor of eternal damnation.
+Under normal circumstances, Remedy would let you be quick and still get the result you need, even if you don’t want to take the time to remove the function from a value that doesn’t need to be (or *shouldn’t* be) converted. But by using unitless mode, you surrender this functionality in favor of eternal damnation.
 
 
 ## Credit where credit is due

@@ -2,11 +2,11 @@
 $output_px: true;
 $output_rem: true;
 
-// Set base font size
-$base_font_size: 16px;
+// Set global font size
+$global_font_size: 16px;
 
 // Import functions and mixins
-@import 'rem';
+@import 'remedy';
 
 // Using function
 .using-function {
@@ -19,21 +19,21 @@ $base_font_size: 16px;
 
 // Using mixin
 .using-mixin {
-  @include rem(margin, 20px auto);
-  @include rem(font-size, 28pt);
-  @include rem(border-top, 7px solid #f90 !important);
-  @include rem(background, #fff url('../img/icon.png') 15px 10px no-repeat);
-  @include rem(background-size, 44px auto, 50% 312px);
+  @include remedy(margin, 20px auto);
+  @include remedy(font-size, 28pt);
+  @include remedy(border-top, 7px solid #f90 !important);
+  @include remedy(background, #fff url('../img/icon.png') 15px 10px no-repeat);
+  @include remedy(background-size, 44px auto, 50% 312px);
   
   // Combine multiple properties
-  @include rem((
+  @include remedy((
     margin: 20px auto,
     border-top: 7px solid #f90 !important,
     background-size: (44px auto, 50% 312px),
   ));
   
   // Automatic rounding where appropriate
-  @include rem((
+  @include remedy((
     margin: 20.2px auto, // Automatically rounded
     font-size: 28.2pt, // Not rounded
   ));
@@ -41,7 +41,7 @@ $base_font_size: 16px;
 
 // Explicitly round px before converting to rem
 .rounded {
-  @include rem_round(margin, 20.3px 8.6px);
-  padding-left: rem_round(13px / 3);
+  @include remedy_round(margin, 20.3px 8.6px);
+  padding-left: remedy_round(13px / 3);
   border-width: rr(15px * 0.7); // Shortcut!
 }

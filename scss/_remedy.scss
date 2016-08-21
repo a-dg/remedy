@@ -4,9 +4,9 @@ $unitless_mode: false !default;
 $global_font_size: 16px !default;
 
 @function r($values...) {
-  @return rem($values...);
+  @return remedy($values...);
 }
-@function rem($values...) {
+@function remedy($values...) {
   @if not $output_rem {
     @return r_clean_values($values...);
   }
@@ -17,7 +17,7 @@ $global_font_size: 16px !default;
     $rem: null;
     @if type_of($value) == list {
       // List: process each value on its own
-      $rem: rem($value...);
+      $rem: remedy($value...);
     } @else if r_is_zero($value) {
       // Zero: enforce no units
       $rem: 0;
@@ -37,21 +37,21 @@ $global_font_size: 16px !default;
 
 
 @function rr($values...) {
-  @return rem_round($values...);
+  @return remedy_round($values...);
 }
-@function rem_round($values...) {
+@function remedy_round($values...) {
   $round: r_round_px($values...);
-  @return rem($round...);
+  @return remedy($round...);
 }
 
 
 @mixin r($values...) {
-  @include rem($values...);
+  @include remedy($values...);
 }
-@mixin rem($property, $values...) {
+@mixin remedy($property, $values...) {
   @if type_of($property) == map {
     @each $key in map_keys($property) {
-      @include rem($key, map_get($property, $key)...);
+      @include remedy($key, map_get($property, $key)...);
     }
   } @else {
     $all_px: null;
@@ -65,7 +65,7 @@ $global_font_size: 16px !default;
       @if r_is_roundable($property) {
         $all_px: r_round_px($all_px...);
       }
-      $all_rem: rem($all_px...);
+      $all_rem: remedy($all_px...);
     }
     
     @if ($output_px and not $output_rem)
@@ -81,11 +81,11 @@ $global_font_size: 16px !default;
 
 
 @mixin rr($values...) {
-  @include rem_round($values...);
+  @include remedy_round($values...);
 }
-@mixin rem_round($values...) {
+@mixin remedy_round($values...) {
   $round: r_round_px($values...);
-  @include rem($round...);
+  @include remedy($round...);
 }
 
 
