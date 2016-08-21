@@ -90,7 +90,7 @@ $global_font_size: 16px !default;
 
 
 @function strip_units($num) {
-  @return $num / (($num * 0) + 1);
+  @return ($num / (($num * 0) + 1));
 }
 @function is_zero($value) {
   @return
@@ -120,11 +120,19 @@ $global_font_size: 16px !default;
   @return not index($non_rounding_properties, $property)
 }
 @function is_inherently_unitless($property, $values...) {
-  $non_convertible_properties: counter-increment, counter-reset, font-weight, pitch-range, richness, stress, volume, z-index, zoom;
+  $non_convertible_properties:
+    counter-increment,
+    counter-reset,
+    font-weight,
+    pitch-range,
+    richness,
+    stress,
+    volume,
+    z-index,
+    zoom;
   
-  // In unitless mode, line-height values greater than
-  // or equal to this variable are assumed to be pixels
-  // instead of relative, and will be converted
+  // In unitless mode, line-height values greater than or equal to this variable
+  // are assumed to be pixels instead of relative, and will be converted
   $line_height_assume_px_min: 6;
   
   @return
