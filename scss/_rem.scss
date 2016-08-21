@@ -12,10 +12,10 @@ $global_font_size: 16px !default;
   }
   
   $all_rem: ();
-  $separator: list-separator($values);
+  $separator: list_separator($values);
   @each $value in $values {
     $rem: null;
-    @if type-of($value) == list {
+    @if type_of($value) == list {
       // List: process each value on its own
       $rem: rem($value...);
     } @else if is_zero($value) {
@@ -49,9 +49,9 @@ $global_font_size: 16px !default;
   @include rem($values...);
 }
 @mixin rem($property, $values...) {
-  @if type-of($property) == map {
-    @each $key in map-keys($property) {
-      @include rem($key, map-get($property, $key)...);
+  @if type_of($property) == map {
+    @each $key in map_keys($property) {
+      @include rem($key, map_get($property, $key)...);
     }
   } @else {
     $all_px: null;
@@ -94,14 +94,14 @@ $global_font_size: 16px !default;
 }
 @function is_zero($value) {
   @return
-    type-of($value) == number
+    type_of($value) == number
     and strip_units($value) == 0;
 }
 @function is_convertible($value) {
   $px_units: 'px', 'pt';
   @if $unitless_mode {
     @return
-      type-of($value) == number
+      type_of($value) == number
       and (
         unitless($value)
         or (
@@ -111,7 +111,7 @@ $global_font_size: 16px !default;
       );
   }
   @return
-    type-of($value) == number
+    type_of($value) == number
     and not unitless($value)
     and index($px_units, unit($value));
 }
@@ -145,10 +145,10 @@ $global_font_size: 16px !default;
 }
 @function round_px($values...) {
   $all_round: ();
-  $separator: list-separator($values);
+  $separator: list_separator($values);
   @each $value in $values {
     $round: null;
-    @if type-of($value) == list {
+    @if type_of($value) == list {
       // List: process each value on its own
       $round: round_px($value...);
     } @else if is_convertible($value) {
@@ -164,10 +164,10 @@ $global_font_size: 16px !default;
 }
 @function clean_values($values...) {
   $all_clean: ();
-  $separator: list-separator($values);
+  $separator: list_separator($values);
   @each $value in $values {
     $clean: null;
-    @if type-of($value) == list {
+    @if type_of($value) == list {
       // List: process each value on its own
       $clean: clean_values($value...);
     } @else if is_zero($value) {
