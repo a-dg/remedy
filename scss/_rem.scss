@@ -1,13 +1,15 @@
+$output_px: true !default;
+$output_rem: true !default;
+$unitless_mode: false !default;
+$global_font_size: 16px !default;
+
 @function r($values...) {
   @return rem($values...);
 }
 @function rem($values...) {
-  $output_rem: true !default;
   @if not $output_rem {
     @return clean_values($values...);
   }
-  
-  $base_font_size: 16px !default;
   
   $all_rem: ();
   $separator: list-separator($values);
@@ -20,9 +22,10 @@
       // Zero: enforce no units
       $rem: 0;
     } @else if is_convertible($value) {
-      // Pixel-like units: calculate rem value from $base_font_size
-      $base_font_value: strip_units($base_font_size);
-      $rem: (strip_units($value / $base_font_value) * 1rem);
+      // Pixel-like units: calculate rem value from $global_font_size
+      $global_font_size_px: percent_to_px($global_font_size);
+      $global_font_value: strip_units($global_font_size_px);
+      $rem: (strip_units($value / $global_font_value) * 1rem);
     } @else {
       // Unitless and non-pixel units: pass through unmodified
       $rem: $value;
@@ -51,11 +54,6 @@
       @include rem($key, map-get($property, $key)...);
     }
   } @else {
-    $output_px: true !default;
-    $output_rem: true !default;
-    $unitless_mode: false !default;
-    $base_font_size: 16px !default;
-    
     $all_px: null;
     $all_rem: null;
     
@@ -101,7 +99,6 @@
 }
 @function is_convertible($value) {
   $px_units: 'px', 'pt';
-  $unitless_mode: false !default;
   @if $unitless_mode {
     @return
       type-of($value) == number
@@ -178,4 +175,13 @@
     $all_clean: append($all_clean, $clean, $separator);
   }
   @return $all_clean;
+}
+@function percent_to_px($value) {
+  @if unitless($value) {
+    $value: ($value * 1px);
+  }
+  @if unit($value) != '%' {
+    @return $value;
+  }
+  @return (strip_units($value / 100) * 16px);
 }
