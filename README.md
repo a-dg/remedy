@@ -183,67 +183,6 @@ div {
 Using the `remedy()` mixin provides the exact same output as the `remedy_round()` mixin for all properties but the three exceptions: `font-size`, `letter-spacing`, and `word-spacing`.
 
 
-## Unitless mode
-
-No good can possibly come from this. But if you’re used to [Foundation](https://github.com/zurb/foundation)’s `rem-calc()` function syntax, you’ll perhaps be more at home with this atrocity enabled.
-
-```scss
-$unitless_mode: true; // No
-```
-
-By denying Christ and enabling this deplorable option, you fling yourself into a world of needless confusion and make life measurably more terrible by allowing this syntax:
-
-```scss
-.why-would-you {
-  @include remedy(margin, 15 30 0 8);
-  font-size: r(22);
-}
-```
-
-Unitless mode assumes you’re being a total jerk and will automatically treat unitless values as pixels.
-
-> Even while I was typing out the above example, I accidentally added `px` to the values, because I am a decent human being, and to omit the units would be to act in opposition to said decency. Seek help.
-
-#### Unitless mixin
-
-The mixin uses the property name to determine if the value should be converted, thereby enabling quicker one-handed typing while you rub one out under your desk.
-
-```scss
-.sigh {
-  @include remedy((
-    margin: 20 18,    // 20px 18px
-    padding-left: 8,  // 8px
-    z-index: 9999,    // 9999
-    font-weight: 700, // 700
-  ));
-}
-```
-
-Since `line-height` can be either unitless or not, the mixin intelligently decides which value you intended. Values greater than or equal to `6` will be treated as pixels.
-
-```scss
-.eye-roll {
-  @include remedy(line-height, 22);  // 22px
-  @include remedy(line-height, 1.6); // 1.6
-}
-```
-
-#### Unitless function
-
-Please note that using the function in unitless mode is hurtful and prevents actual, meaningfully-unitless values from passing through unharmed. That means you can’t do this:
-
-```scss
-.asplode {
-  margin: r(20 18);
-  padding-left: r(8);
-  z-index: r(9999);    // 9999px? As if.
-  line-height: r(1.4); // 1.4px? Not even.
-}
-```
-
-Under normal circumstances, Remedy would let you be quick and still get the result you need, even if you don’t want to take the time to remove the function from a value that doesn’t need to be (or *shouldn’t* be) converted. But by using unitless mode, you surrender this functionality in favor of eternal damnation.
-
-
 ## Credit where credit is due
 
 Mixin based on the [rem mixin by Ray Brown](https://github.com/bitmanic/rem). `strip_units()` function lifted from [Zurb Foundation](https://github.com/zurb/foundation). Map syntax inspired by the [rem mixin by Pierre Burel](https://github.com/pierreburel/sass-rem).
