@@ -42,6 +42,6 @@ $global_font_size: 16px;
 // Explicitly round px before converting to rem
 .rounded {
   @include remedy_round(margin, 20.3px 8.6px);
-  padding-left: remedy_round(13px / 3);
+  padding-left: remedy_round(calc(13px / 3));
   border-width: rr(15px * 0.7); // Shortcut!
 }

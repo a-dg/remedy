@@ -1,10 +1,28 @@
+@use 'sass:string';
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:meta';
+
 $output_px: true !default;
 $output_rem: true !default;
 $global_font_size: 16px !default;
 
+
+// /**
+//  * Convert values to rems
+//  * @param {mixed} $values
+//  * @return {mixed}
+//  */
 @function r($values...) {
   @return remedy($values...);
 }
+
+
+// /**
+//  * Convert values to rems
+//  * @param {mixed} $values
+//  * @return {mixed}
+//  */
 @function remedy($values...) {
   @if not $output_rem {
     @return r_clean_values($values...);
@@ -24,7 +42,7 @@ $global_font_size: 16px !default;
       // Pixel-like units: calculate rem value from $global_font_size
       $global_font_size_px: r_percent_to_px($global_font_size);
       $global_font_value: r_strip_units($global_font_size_px);
-      $rem: (r_strip_units($value / $global_font_value) * 1rem);
+      $rem: (r_strip_units(calc($value / $global_font_value)) * 1rem);
     } @else {
       // Unitless and non-pixel units: pass through unmodified
       $rem: $value;
@@ -35,22 +53,46 @@ $global_font_size: 16px !default;
 }
 
 
+// /**
+//  * Round values and convert to rems
+//  * @param {mixed} $values
+//  * @return {mixed}
+//  */
 @function rr($values...) {
   @return remedy_round($values...);
 }
+
+
+// /**
+//  * Round values and convert to rems
+//  * @param {mixed} $values
+//  * @return {mixed}
+//  */
 @function remedy_round($values...) {
   $round: r_round_px($values...);
   @return remedy($round...);
 }
 
 
+// /**
+//  * Convert properties to rems
+//  * @param {mixed} $values
+//  * @return {mixed}
+//  */
 @mixin r($values...) {
   @include remedy($values...);
 }
+
+
+// /**
+//  * Convert properties to rems
+//  * @param {mixed} $values
+//  * @return {mixed}
+//  */
 @mixin remedy($property, $values...) {
   @if type_of($property) == map {
-    @each $key in map_keys($property) {
-      @include remedy($key, map_get($property, $key)...);
+    @each $key in map.keys($property) {
+      @include remedy($key, map.get($property, $key)...);
     }
   } @else {
     $all_px: r_clean_values($values...);
@@ -71,34 +113,144 @@ $global_font_size: 16px !default;
 }
 
 
+// /**
+//  * Selectively round property values and convert to rems
+//  * @param {mixed} $values
+//  * @return {mixed}
+//  */
 @mixin rr($values...) {
   @include remedy_round($values...);
 }
+
+
+// /**
+//  * Selectively round property values and convert to rems
+//  * @param {mixed} $values
+//  * @return {mixed}
+//  */
 @mixin remedy_round($values...) {
   $round: r_round_px($values...);
   @include remedy($round...);
 }
 
 
-@function r_strip_units($num) {
-  @return ($num / (($num * 0) + 1));
+// /**
+//  * Strip units from number
+//  * @param {number} $number
+//  * @return {unitless number}
+//  */
+@function r_strip_units($number) {
+  @if meta.type_of($number) == number and not unitless($number) {
+    $num_length: string.length(#{$number});
+    $unit_length: string.length(unit($number));
+    $unitless: string.slice(#{$number}, 1, ($num_length - $unit_length));
+    @return r_convert_to_number($unitless);
+  }
+  // @warn '"#{$number}" is not a number, or it does not have any units to strip away.';
+  @return $number;
 }
+
+
+// /**
+//  * Convert string to number
+//  * @link https://hugogiraudel.com/2014/01/15/sass_string_to_number/
+//  * @author Hugo Giraudel
+//  * @param {String | Number} $value - Value to be parsed
+//  * @return {Number}
+//  */
+@function r_convert_to_number($value) {
+  @if meta.type_of($value) == number {
+    @return $value;
+  } @else if meta.type_of($value) != string {
+    @error 'Value for r_convert_to_number() should be a number or a string';
+  }
+  
+  $result: 0;
+  $digits: 0;
+  $is_negative: string.slice($value, 1, 1) == '-';
+  $numbers: ('0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9);
+  
+  @for $i from if($is_negative, 2, 1) through string.length($value) {
+    $character: string.slice($value, $i, $i);
+    
+    @if not (list.index(map.keys($numbers), $character) or $character == '.') {
+      @return r_append_unit_to_value(if($is_negative, ($result * -1), $result), string.slice($value, $i));
+    }
+    
+    @if $character == '.' {
+      $digits: 1;
+    } @else if $digits == 0 {
+      $result: (($result * 10) + map.get($numbers, $character));
+    } @else {
+      $digits: ($digits * 10);
+      $result: ($result + calc(map.get($numbers, $character) / $digits));
+    }
+  }
+  
+  @return if($is_negative, ($result * -1), $result);
+}
+
+
+// /**
+//  * Append unit to numeric value
+//  * @link https://hugogiraudel.com/2014/01/15/sass_string_to_number/
+//  * @author Hugo Giraudel
+//  * @param {Number} $value - Value to add unit to
+//  * @param {String} $unit - String representation of the unit
+//  * @return {Number} - `$value` expressed in `$unit`
+//  */
+@function r_append_unit_to_value($value, $unit) {
+  $units: ('px': 1px, 'cm': 1cm, 'mm': 1mm, '%': 1%, 'ch': 1ch, 'pc': 1pc, 'in': 1in, 'em': 1em, 'rem': 1rem, 'pt': 1pt, 'ex': 1ex, 'vw': 1vw, 'vh': 1vh, 'vmin': 1vmin, 'vmax': 1vmax);
+  @if not list.index(map.keys($units), $unit) {
+    @error 'Invalid unit: #{$unit}';
+  }
+  
+  @return ($value * map.get($units, $unit));
+}
+
+
+// /**
+//  * Is this value zero?
+//  * @param {mixed} $value
+//  * @return {bool}
+//  */
 @function r_is_zero($value) {
   @return
-    type_of($value) == number
+    meta.type_of($value) == number
     and r_strip_units($value) == 0;
 }
+
+
+// /**
+//  * Can this value be converted to rems?
+//  * @param {mixed} $value
+//  * @return {bool}
+//  */
 @function r_is_convertible($value) {
   $px_units: 'px', 'pt';
   @return
     type_of($value) == number
     and not unitless($value)
-    and index($px_units, unit($value));
+    and list.index($px_units, unit($value));
 }
+
+
+// /**
+//  * Can this property be safely rounded?
+//  * @param {string} $property
+//  * @return {bool}
+//  */
 @function r_is_roundable($property) {
   $non_rounding_properties: font-size, letter-spacing, word-spacing;
-  @return not index($non_rounding_properties, $property)
+  @return not list.index($non_rounding_properties, $property);
 }
+
+
+// /**
+//  * Round pixel-like values
+//  * @param {mixed} $values
+//  * @return {mixed}
+//  */
 @function r_round_px($values...) {
   $all_round: ();
   $separator: list_separator($values);
@@ -118,6 +270,13 @@ $global_font_size: 16px !default;
   }
   @return $all_round;
 }
+
+
+// /**
+//  * Clean up values
+//  * @param {mixed} $values
+//  * @return {mixed}
+//  */
 @function r_clean_values($values...) {
   $all_clean: ();
   $separator: list_separator($values);
@@ -140,6 +299,13 @@ $global_font_size: 16px !default;
   }
   @return $all_clean;
 }
+
+
+// /**
+//  * Convert percentage to pixels
+//  * @param {number} $value
+//  * @return {number}
+//  */
 @function r_percent_to_px($value) {
   @if unitless($value) {
     $value: ($value * 1px);
@@ -147,5 +313,6 @@ $global_font_size: 16px !default;
   @if unit($value) != '%' {
     @return $value;
   }
-  @return (r_strip_units($value / 100) * 16px);
+  
+  @return (r_strip_units(calc($value / 100)) * $global_font_size);
 }
